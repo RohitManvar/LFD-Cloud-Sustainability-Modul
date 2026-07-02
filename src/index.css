@@ -86,6 +86,7 @@ thead tr.header-sub th {
   position: sticky;
   top: 0;
   z-index: 20;
+  background-color: var(--header-bg-light); /* Ensures content doesn't show through */
   box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1);
 }
 
