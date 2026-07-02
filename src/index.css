@@ -18,6 +18,10 @@
   --text-muted: #475569;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   background-color: #f1f5f9;
@@ -35,11 +39,12 @@ body {
 
 .spreadsheet-wrapper {
   flex-grow: 1;
+  min-width: 0; /* Prevent flex overflow */
   background: white;
   border: 1px solid var(--border-color);
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   overflow-x: auto;
-  border-radius: 4px;
+  border-radius: 6px;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -103,6 +108,12 @@ th, td {
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
   cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
 }
 
 .select-input:focus {
@@ -121,7 +132,7 @@ th, td {
   background: white;
   border: 1px solid var(--border-color);
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  border-radius: 4px;
+  border-radius: 6px;
   flex-shrink: 0;
   position: sticky;
   top: 20px;
@@ -134,6 +145,7 @@ th, td {
   padding: 12px;
   text-align: center;
   font-size: 14px;
+  border-radius: 6px 6px 0 0;
 }
 
 .summary-total-row {
@@ -151,7 +163,12 @@ th, td {
 
 .notes-section ul {
   padding-left: 20px;
-  margin: 0;
+  margin: 4px 0 0 0;
+}
+
+.notes-section li {
+  margin-bottom: 4px;
+  line-height: 1.5;
 }
 
 /* Hover effect on data rows */
@@ -160,12 +177,35 @@ tbody tr:hover {
   transition: background-color 0.15s;
 }
 
+/* Scroll hint indicator (visible on tablet/mobile) */
+.scroll-hint {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #eff6ff;
+  color: #3b82f6;
+  font-size: 12px;
+  font-weight: 500;
+  border-bottom: 1px solid #dbeafe;
+}
+
+.scroll-hint svg {
+  animation: scrollBounce 1.5s ease-in-out infinite;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+
 /* ========================================
-   RESPONSIVE: TABLET (768px - 1024px)
+   RESPONSIVE: TABLET LANDSCAPE (1024px)
    ======================================== */
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
   body {
-    padding: 12px;
+    padding: 16px;
   }
 
   .app-container {
@@ -173,54 +213,57 @@ tbody tr:hover {
     gap: 16px;
   }
 
-  /* Summary goes full width and unstick */
-  .summary-wrapper {
-    width: 100%;
-    position: static;
-    order: -1; /* Show summary above checklist on tablet */
-  }
-
-  .summary-wrapper table {
-    font-size: 13px;
-  }
-
-  /* Spreadsheet takes full width */
-  .spreadsheet-wrapper {
-    width: 100%;
-  }
-
-  /* Slightly reduce padding in cells */
-  th, td {
-    padding: 6px 10px;
-  }
-
-  /* Reduce column widths for tablet */
-  .col-req { width: 220px; }
-  .col-ref { width: 180px; }
-  .col-req-type { width: 130px; }
-  .col-action { width: 120px; }
-  .col-clause { width: 150px; }
-  .col-status { width: 160px; }
-}
-
-/* ========================================
-   RESPONSIVE: MOBILE (below 768px)
-   ======================================== */
-@media (max-width: 768px) {
-  body {
-    padding: 8px;
-  }
-
-  .app-container {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  /* Summary table full width, on top */
+  /* Summary: full-width horizontal card on top */
   .summary-wrapper {
     width: 100%;
     position: static;
     order: -1;
+  }
+
+  /* Make summary table a horizontal row layout */
+  .summary-wrapper table {
+    font-size: 13px;
+  }
+
+  /* Spreadsheet scrolls horizontally */
+  .spreadsheet-wrapper {
+    width: 100%;
+  }
+
+  .spreadsheet-wrapper table {
+    min-width: 1050px;
+  }
+
+  .scroll-hint {
+    display: flex;
+  }
+
+  th, td {
+    padding: 7px 10px;
+  }
+
+  .col-req { width: 240px; }
+  .col-ref { width: 190px; }
+  .col-req-type { width: 130px; }
+  .col-action { width: 120px; }
+  .col-clause { width: 160px; }
+  .col-status { width: 170px; }
+}
+
+/* ========================================
+   RESPONSIVE: TABLET PORTRAIT (768px)
+   ======================================== */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .app-container {
+    gap: 12px;
+  }
+
+  .summary-wrapper {
+    border-radius: 6px;
   }
 
   .summary-header {
@@ -228,14 +271,14 @@ tbody tr:hover {
     font-size: 13px;
   }
 
-  /* Spreadsheet — force minimum width so it scrolls horizontally */
-  .spreadsheet-wrapper {
-    width: 100%;
-    border-radius: 4px;
+  .summary-wrapper th,
+  .summary-wrapper td {
+    padding: 6px 8px;
+    font-size: 12px;
   }
 
   .spreadsheet-wrapper table {
-    min-width: 900px; /* Ensures horizontal scroll rather than crushing columns */
+    min-width: 950px;
     font-size: 12px;
   }
 
@@ -248,18 +291,17 @@ tbody tr:hover {
     font-size: 13px;
   }
 
-  /* Tighten column widths */
-  .col-sno { width: 36px; }
-  .col-req { width: 180px; }
-  .col-ref { width: 140px; }
-  .col-req-type { width: 110px; }
-  .col-action { width: 100px; }
-  .col-clause { width: 130px; }
-  .col-status { width: 140px; }
-  .col-score { width: 55px; }
+  .col-sno { width: 40px; }
+  .col-req { width: 200px; }
+  .col-ref { width: 160px; }
+  .col-req-type { width: 120px; }
+  .col-action { width: 110px; }
+  .col-clause { width: 140px; }
+  .col-status { width: 150px; }
+  .col-score { width: 60px; }
 
   .select-input {
-    padding: 5px 6px;
+    padding: 5px 22px 5px 6px;
     font-size: 12px;
   }
 
@@ -274,19 +316,15 @@ tbody tr:hover {
 }
 
 /* ========================================
-   RESPONSIVE: SMALL MOBILE (below 480px)
+   RESPONSIVE: MOBILE (below 480px)
    ======================================== */
 @media (max-width: 480px) {
   body {
-    padding: 4px;
+    padding: 6px;
   }
 
   .app-container {
     gap: 8px;
-  }
-
-  .summary-wrapper {
-    border-radius: 4px;
   }
 
   .summary-header {
@@ -297,15 +335,15 @@ tbody tr:hover {
   .summary-wrapper th,
   .summary-wrapper td {
     padding: 5px 6px;
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .spreadsheet-wrapper {
-    border-radius: 2px;
+    border-radius: 4px;
   }
 
   .spreadsheet-wrapper table {
-    min-width: 800px;
+    min-width: 850px;
     font-size: 11px;
   }
 
@@ -318,17 +356,27 @@ tbody tr:hover {
     font-size: 12px;
   }
 
-  .col-sno { width: 30px; }
-  .col-req { width: 160px; }
-  .col-ref { width: 120px; }
-  .col-req-type { width: 90px; }
-  .col-action { width: 80px; }
-  .col-clause { width: 110px; }
-  .col-status { width: 120px; }
-  .col-score { width: 45px; }
+  .scroll-hint {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+
+  .col-sno { width: 32px; }
+  .col-req { width: 170px; }
+  .col-ref { width: 130px; }
+  .col-req-type { width: 100px; }
+  .col-action { width: 90px; }
+  .col-clause { width: 120px; }
+  .col-status { width: 130px; }
+  .col-score { width: 50px; }
 
   .select-input {
-    padding: 4px 5px;
+    padding: 4px 20px 4px 5px;
     font-size: 11px;
+  }
+
+  .notes-section {
+    padding: 10px;
+    font-size: 10px;
   }
 }
