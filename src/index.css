@@ -1,0 +1,334 @@
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --border-color: #a6a6a6;
+  --header-bg-dark: #1e3a8a;
+  --header-bg-light: #eff6ff;
+  --header-bg-yellow: #fef08a;
+  --cell-bg-white: #ffffff;
+  --cell-hover: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+}
+
+body {
+  margin: 0;
+  background-color: #f1f5f9;
+  color: var(--text-main);
+  padding: 20px;
+}
+
+.app-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.spreadsheet-wrapper {
+  flex-grow: 1;
+  background: white;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  overflow-x: auto;
+  border-radius: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  font-size: 13px;
+}
+
+th, td {
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+
+/* Headers */
+.header-main {
+  background-color: var(--header-bg-dark);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.header-sub {
+  background-color: var(--header-bg-light);
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.section-header-blue {
+  background-color: #dbeafe;
+  font-weight: 600;
+  text-align: center;
+}
+
+.section-header-yellow {
+  background-color: #fef9c3;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Column Widths */
+.col-sno { width: 50px; text-align: center; }
+.col-req { width: 300px; }
+.col-ref { width: 250px; }
+.col-req-type { width: 150px; text-align: center; }
+.col-action { width: 150px; text-align: center; }
+.col-clause { width: 180px; }
+.col-status { width: 200px; }
+.col-score { width: 80px; text-align: center; font-weight: 600; }
+
+/* Inputs / Selects */
+.select-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.select-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.select-input.status-yes { color: #166534; background-color: #dcfce7; }
+.select-input.status-no { color: #991b1b; background-color: #fee2e2; }
+.select-input.status-partial { color: #854d0e; background-color: #fef08a; }
+.select-input.status-na { color: #475569; background-color: #f1f5f9; }
+
+/* Summary Table */
+.summary-wrapper {
+  width: 320px;
+  background: white;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  border-radius: 4px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 20px;
+}
+
+.summary-header {
+  background-color: var(--header-bg-dark);
+  color: white;
+  font-weight: 600;
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.summary-total-row {
+  font-weight: 700;
+  background-color: #f1f5f9;
+}
+
+.notes-section {
+  padding: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-color);
+  background-color: #fafafa;
+}
+
+.notes-section ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+/* Hover effect on data rows */
+tbody tr:hover {
+  background-color: var(--cell-hover);
+  transition: background-color 0.15s;
+}
+
+/* ========================================
+   RESPONSIVE: TABLET (768px - 1024px)
+   ======================================== */
+@media (max-width: 1024px) {
+  body {
+    padding: 12px;
+  }
+
+  .app-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Summary goes full width and unstick */
+  .summary-wrapper {
+    width: 100%;
+    position: static;
+    order: -1; /* Show summary above checklist on tablet */
+  }
+
+  .summary-wrapper table {
+    font-size: 13px;
+  }
+
+  /* Spreadsheet takes full width */
+  .spreadsheet-wrapper {
+    width: 100%;
+  }
+
+  /* Slightly reduce padding in cells */
+  th, td {
+    padding: 6px 10px;
+  }
+
+  /* Reduce column widths for tablet */
+  .col-req { width: 220px; }
+  .col-ref { width: 180px; }
+  .col-req-type { width: 130px; }
+  .col-action { width: 120px; }
+  .col-clause { width: 150px; }
+  .col-status { width: 160px; }
+}
+
+/* ========================================
+   RESPONSIVE: MOBILE (below 768px)
+   ======================================== */
+@media (max-width: 768px) {
+  body {
+    padding: 8px;
+  }
+
+  .app-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Summary table full width, on top */
+  .summary-wrapper {
+    width: 100%;
+    position: static;
+    order: -1;
+  }
+
+  .summary-header {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  /* Spreadsheet — force minimum width so it scrolls horizontally */
+  .spreadsheet-wrapper {
+    width: 100%;
+    border-radius: 4px;
+  }
+
+  .spreadsheet-wrapper table {
+    min-width: 900px; /* Ensures horizontal scroll rather than crushing columns */
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .header-main {
+    font-size: 13px;
+  }
+
+  /* Tighten column widths */
+  .col-sno { width: 36px; }
+  .col-req { width: 180px; }
+  .col-ref { width: 140px; }
+  .col-req-type { width: 110px; }
+  .col-action { width: 100px; }
+  .col-clause { width: 130px; }
+  .col-status { width: 140px; }
+  .col-score { width: 55px; }
+
+  .select-input {
+    padding: 5px 6px;
+    font-size: 12px;
+  }
+
+  .notes-section {
+    padding: 12px;
+    font-size: 11px;
+  }
+
+  .notes-section ul {
+    padding-left: 16px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE: SMALL MOBILE (below 480px)
+   ======================================== */
+@media (max-width: 480px) {
+  body {
+    padding: 4px;
+  }
+
+  .app-container {
+    gap: 8px;
+  }
+
+  .summary-wrapper {
+    border-radius: 4px;
+  }
+
+  .summary-header {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .summary-wrapper th,
+  .summary-wrapper td {
+    padding: 5px 6px;
+    font-size: 12px;
+  }
+
+  .spreadsheet-wrapper {
+    border-radius: 2px;
+  }
+
+  .spreadsheet-wrapper table {
+    min-width: 800px;
+    font-size: 11px;
+  }
+
+  th, td {
+    padding: 5px 6px;
+    font-size: 11px;
+  }
+
+  .header-main {
+    font-size: 12px;
+  }
+
+  .col-sno { width: 30px; }
+  .col-req { width: 160px; }
+  .col-ref { width: 120px; }
+  .col-req-type { width: 90px; }
+  .col-action { width: 80px; }
+  .col-clause { width: 110px; }
+  .col-status { width: 120px; }
+  .col-score { width: 45px; }
+
+  .select-input {
+    padding: 4px 5px;
+    font-size: 11px;
+  }
+}
