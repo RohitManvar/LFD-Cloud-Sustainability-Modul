@@ -26,7 +26,13 @@ body {
   margin: 0;
   background-color: #f1f5f9;
   color: var(--text-main);
-  padding: 20px;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
 }
 
 .app-container {
@@ -35,15 +41,20 @@ body {
   display: flex;
   gap: 24px;
   align-items: flex-start;
+  height: 100%;
+  padding: 20px;
 }
 
 .spreadsheet-wrapper {
   flex-grow: 1;
-  min-width: 0; /* Prevent flex overflow */
+  flex-basis: 0;
+  min-width: 0;
+  min-height: 0; /* Allows scrolling inside flex */
   background: white;
   border: 1px solid var(--border-color);
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  overflow-x: auto;
+  overflow-x: hidden; /* No horizontal scroll */
+  overflow-y: auto;   /* Vertical scroll */
   border-radius: 6px;
   -webkit-overflow-scrolling: touch;
 }
@@ -59,6 +70,7 @@ th, td {
   border: 1px solid var(--border-color);
   padding: 8px 12px;
   vertical-align: middle;
+  word-break: break-word; /* Allows long text to wrap so table fits screen */
 }
 
 /* Headers */
@@ -67,6 +79,14 @@ th, td {
   color: white;
   font-weight: 600;
   font-size: 14px;
+}
+
+/* Sticky column headers - strictly the second row */
+thead tr.header-sub th {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1);
 }
 
 .header-sub {
@@ -136,6 +156,8 @@ th, td {
   flex-shrink: 0;
   position: sticky;
   top: 20px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
 }
 
 .summary-header {
@@ -177,38 +199,13 @@ tbody tr:hover {
   transition: background-color 0.15s;
 }
 
-/* Scroll hint indicator (visible on tablet/mobile) */
-.scroll-hint {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: #eff6ff;
-  color: #3b82f6;
-  font-size: 12px;
-  font-weight: 500;
-  border-bottom: 1px solid #dbeafe;
-}
-
-.scroll-hint svg {
-  animation: scrollBounce 1.5s ease-in-out infinite;
-}
-
-@keyframes scrollBounce {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(4px); }
-}
 
 /* ========================================
    RESPONSIVE: TABLET LANDSCAPE (1024px)
    ======================================== */
 @media (max-width: 1100px) {
-  body {
-    padding: 16px;
-  }
-
   .app-container {
+    padding: 16px;
     flex-direction: column;
     gap: 16px;
   }
@@ -218,6 +215,7 @@ tbody tr:hover {
     width: 100%;
     position: static;
     order: -1;
+    max-height: 200px; /* Optional: limit height on tablet so table has room */
   }
 
   /* Make summary table a horizontal row layout */
@@ -225,17 +223,13 @@ tbody tr:hover {
     font-size: 13px;
   }
 
-  /* Spreadsheet scrolls horizontally */
+  /* Spreadsheet scrolls vertically only */
   .spreadsheet-wrapper {
     width: 100%;
   }
 
   .spreadsheet-wrapper table {
-    min-width: 1050px;
-  }
-
-  .scroll-hint {
-    display: flex;
+    width: 100%;
   }
 
   th, td {
@@ -254,11 +248,8 @@ tbody tr:hover {
    RESPONSIVE: TABLET PORTRAIT (768px)
    ======================================== */
 @media (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
-
   .app-container {
+    padding: 10px;
     gap: 12px;
   }
 
@@ -278,7 +269,7 @@ tbody tr:hover {
   }
 
   .spreadsheet-wrapper table {
-    min-width: 950px;
+    width: 100%;
     font-size: 12px;
   }
 
@@ -319,11 +310,8 @@ tbody tr:hover {
    RESPONSIVE: MOBILE (below 480px)
    ======================================== */
 @media (max-width: 480px) {
-  body {
-    padding: 6px;
-  }
-
   .app-container {
+    padding: 6px;
     gap: 8px;
   }
 
